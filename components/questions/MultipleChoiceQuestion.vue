@@ -54,17 +54,49 @@
   }
   
   .choices {
-    margin-bottom: 20px;
-  }
-  
-  .choice {
-    margin-bottom: 10px;
-  }
+  margin-bottom: 20px;
+}
 
-  .choice label {
-    margin-left: 0.25rem;
-  }
-  
+.choice {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.choice label {
+  margin-left: 0.25rem;
+}
+
+.choice input {
+  appearance: none;
+  background-color: #fff;
+  margin: 0;
+  font: inherit;
+  color: currentColor;
+  width: 1em;
+  height: 1em;
+  border: 0.1em solid rgba(60, 60, 67, 0.3);
+  border-radius: 50%;
+  transform: translateY(-0.075em);
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+}
+
+.choice input::before {
+  content: '';
+  width: 0.65em;
+  height: 0.65em;
+  border-radius: 50%;
+  transition: transform 0.2s ease-in-out;
+  box-shadow: inset 1em 1em #3ea2a8;
+  transform: scale(0);
+}
+
+.choice input:checked::before {
+  transform: scale(1);
+}
+
   .buttons {
     margin-top: 20px;
     display: flex;
