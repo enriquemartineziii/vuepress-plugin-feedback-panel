@@ -14,13 +14,11 @@
           <div v-on:click="revealClicked" class="feedback-panel-close-btn">
             <span>+</span>
           </div>
-          <div
-            class="feedback-panel-question-container"
-            v-if="question !== null"
-          >
+          <div class="feedback-panel-question-container" v-if="question !== null">
             <component
               v-bind:is="question.component"
               v-bind:questionText="question.questionText"
+              v-bind="question.props"
               @answered="answerProvided"
             >
               <div class="feedback-panel-additional-buttons">
@@ -41,22 +39,11 @@
               </div>
             </component>
 
-            <Stepper
-              class="feedback-panel-stepper"
-              :total="totalQuestions"
-              :current="question.questionNumber"
-            />
+            <Stepper class="feedback-panel-stepper" :total="totalQuestions" :current="question.questionNumber" />
           </div>
 
           <div v-else class="feedback-panel-last-view">
             Thanks for your feedback. It helps us to make our website better!
-            <!-- <div class="feedback-panel-loading">
-              <img
-                class="feedback-panel-loading"
-                v-if="sendingInProgress"
-                :src="require('../assets/loading.gif')"
-              />
-            </div> -->
           </div>
         </div>
       </transition>
@@ -64,24 +51,16 @@
   </div>
 </template>
 
-
 <script>
 import Reminder from "./Reminder.vue";
 import Stepper from "./Stepper.vue";
 import StarQuestion from "./questions/StarQuestion.vue";
 import OpenQuestion from "./questions/OpenQuestion.vue";
 import BinaryQuestion from "./questions/BinaryQuestion.vue";
-import { sendWithRegistration, sendBasic } from "../scripts/feedbackSender";
-import {
-  isPanelOpen,
-  isReminderOpen,
-  mutations,
-} from "../scripts/feedbackStore";
-import { isWorthSubmitting } from "../scripts/generalUtils";
+import MultipleChoiceQuestion from "./questions/MultipleChoiceQuestion.vue";
+import { sendWithRegistration } from "../scripts/feedbackSender";
+import { isPanelOpen, isReminderOpen, mutations } from "../scripts/feedbackStore";
 import options from "../config";
-// import c from "../config";
-// import { getCache, removeCache, setCache } from "../scripts/cacheUtils";
-// import consts from "../consts";
 
 let getFirstQuestion;
 let getNextQuestion;
@@ -95,11 +74,11 @@ export default {
     Stepper,
     StarQuestion,
     OpenQuestion,
-    BinaryQuestion
+    BinaryQuestion,
+    MultipleChoiceQuestion,
   },
 
   created() {
-    // Workaround for a weird behaviour where data() part is executed before the created() hook - init() has to be invoked before the other functions!
     import("../scripts/questions").then((m) => {
       getFirstQuestion = m.getFirstQuestion;
       getNextQuestion = m.getNextQuestion;
@@ -118,7 +97,7 @@ export default {
       sendingInProgress: false,
       totalQuestions: 0,
       feedbackSubmitted: false,
-      options: options.config
+      options: options.config,
     };
   },
 
@@ -128,18 +107,6 @@ export default {
   },
 
   methods: {
-    // enableShakyButton() {
-    //   setInterval(() => {
-    //     if (this.isOpen || this.feedbackSubmitted) return;
-
-    //     const classList = this.$refs.feedbackButton.classList;
-    //     classList.add("shaky");
-    //     setTimeout(() => {
-    //       classList.remove("shaky");
-    //     }, 1000);
-    //   }, c.config.buttonShakeIntervalInSeconds * 1000);
-    // },
-
     revealClicked: function() {
       mutations.toggleIsPanelOpen();
 
@@ -208,25 +175,6 @@ export default {
         this.answers = [];
       }, timeout);
     },
-    // async tryToSendFailedSubmissions() {
-    //   const failedSubmissionsString = getCache(consts.failedFeedbackCacheName);
-    //   if (failedSubmissionsString === null) {
-    //     return;
-    //   }
-    //   console.log("Trying to resend failed feedback submissions");
-    //   let isOk = true;
-    //   const fails = JSON.parse(failedSubmissionsString);
-    //   await fails.submissions.reverse().forEach(async (feedback, i, array) => {
-    //     const freshCache = JSON.parse(getCache(consts.failedFeedbackCacheName));
-    //     freshCache.submissions.splice(array.length - 1 - i, 1);
-    //     setCache(consts.failedFeedbackCacheName, freshCache);
-    //     isOk = isOk && (await sendBasic(feedback));
-    //   });
-
-    //   if (isOk) {
-    //     removeCache(consts.failedFeedbackCacheName);
-    //   }
-    // },
   },
 };
 </script>
@@ -235,35 +183,33 @@ export default {
 .feedback-panel-button {
   transform: rotate(-90deg) translateY(-50%);
   position: fixed;
-  right: -4rem; /* Adjust this value to align perfectly */
+  right: -4.1rem; /* Adjust this value to align perfectly */
   top: 50%;
   padding: 0.25rem 1.5rem;
   border: 1px solid transparent;
   border-radius: 0.25rem 0.25rem 0 0;
   cursor: pointer;
-  transition: transform 0.5s, background-color 0.5s;
+  transition: transform 0.5s, background-color 0.2s;
   z-index: 1001;
-  /* background-color: #296c70; */
   background-color: #327F86;
+}
+
+.feedback-panel-button:hover {
+  background-color: #2b6173;
 }
 
 .feedback-panel-dialog-container {
   /* Fixes code blocks overlap */
   z-index: 1003;
-
   position: fixed;
   right: 0;
   top: 0;
   background-color: white;
-  border: 1px solid #f8f8f8;
-  /* border-radius: 10px; */
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   transition: transform 0.5s, box-shadow 0.5s;
   overflow: auto;
   width: 25rem;
   height: 100vh;
-  /* max-height: 30rem; */
-  /* height: 20rem; */
 }
 
 .feedback-panel-enter-active,
@@ -324,25 +270,28 @@ export default {
   right: 0;
   -webkit-transform: translateX(-50%);
   transform: translateX(-50%);
+  color: gray;
 }
 
 .feedback-panel-btn-feedback {
-  background-color: #bbbbbb;
+  background-color: #327F86;
   border: 2px solid #ffffff00;
-  color: #1f1f1f;
+  color: white;
   min-width: 56px;
   padding: 5px 10px;
   border-radius: 5px;
   font-family: inherit;
   cursor: pointer;
+  transition: 0.2s ease;
 }
 
 .feedback-panel-btn-feedback:hover {
-  background-color: #cccccc;
+  background-color: #2b6173;
+  transition: 0.2s ease;
 }
 
 .feedback-panel-btn-feedback:active {
-  background-color: #cccccc;
+  background-color: #2b6173;
 }
 
 .feedback-panel-btn-skip {
