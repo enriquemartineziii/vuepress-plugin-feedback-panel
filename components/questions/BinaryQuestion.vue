@@ -4,27 +4,23 @@
     <div class="answers">
       <span class="answer" @click="answer(true)">
         <div class="answer-icon">
-          <!-- <img
-            src="../../assets/like-picto.svg"
+          <img
+            src="../../assets/thumbsup.svg"
             height="28px"
             alt="feedback-icon"
-          /> -->
-          <!-- <svg height="28px" width="28px">
-            <use href="../../assets/like-picto.svg#ok"></use>
-          </svg> -->
+            draggable="false"
+          />
         </div>
         <span class="answer-text">Yes</span>
       </span>
       <span class="answer" @click="answer(false)">
         <div class="answer-icon answer-no">
-          <!-- <img
-            src="../../assets/like-picto.svg"
+          <img
+            src="../../assets/thumbsdown.svg"
             height="28px"
             alt="feedback-icon"
-          /> -->
-          <!-- <svg height="28px" width="28px">
-            <use href="../../assets/like-picto.svg#ok"></use>
-          </svg> -->
+            draggable="false"
+          />
         </div>
         <span class="answer-text">No</span>
       </span>
@@ -44,60 +40,68 @@ export default {
       this.$emit("answered", choice);
     },
   },
+  mounted() {
+    const images = this.$el.querySelectorAll('img');
+    images.forEach(img => {
+      img.addEventListener('dragstart', (event) => {
+        event.preventDefault();
+      });
+    });
+  },
 };
 </script>
 
-<style lang="stylus" scoped>
+<style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+}
+
 .question {
-  margin-bottom: 20px;
-  font-weight: 600;
+  margin-bottom: 1rem;
+  /* font-weight: 600; */
   font-size: 1rem;
+  /* text-align: center; */
 }
 
 .answers {
   display: flex;
-  justify-content: space-around;
-  margin-top: 35px;
-  margin-bottom: 40px;
-}
-
-.answers div {
-  font-size: 1.4em;
-  transition: font-size 0.1s;
-}
-
-.slot {
-  margin-top: 20px;
+  justify-content: center;
 }
 
 .answer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0 20px;
   color: black;
   font-size: 1.1em;
   font-weight: 200;
   cursor: pointer;
-//  border: 1px solid lightgray;
-//  padding: 0.25rem 2rem;
-//  border-radius: 0.25rem;
+}
+
+.answer-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.answer-text {
+  font-weight: 500;
 }
 
 .answer:hover {
   color: #2c3e50 !important;
 }
 
-// .answer:hover svg {
-//   fill: #262626;
-// }
-
-// .answer-icon {
-//   fill: #262626;
-// }
-
-.answer-text {
-  font-weight: 500;
-}
-
 .answer-text:hover {
   color: #262626;
   font-weight: 500;
+}
+
+.slot {
+  margin-top: 20px;
 }
 </style>

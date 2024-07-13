@@ -1,6 +1,12 @@
 <template>
   <div>
     <div class="feedback-panel-button" v-on:click="revealClicked" ref="feedbackButton">
+      <img
+        src="../assets/documentation-white.svg"
+        height="20px"
+        alt="docs icon"
+        draggable="false"
+      />
       <span class="feedback-panel-content">{{options.buttonText}}</span>
     </div>
 
@@ -15,6 +21,15 @@
             <span>+</span>
           </div>
           <div class="feedback-panel-question-container" v-if="question !== null">
+            <div class="feedback-panel-header">
+              <img
+                src="../assets/documentation.svg"
+                height="20px"
+                alt="docs icon"
+                draggable="false"
+              />
+              <div class="provide-feedback"><strong>Provide feedback</strong></div>
+            </div>
             <component
               v-bind:is="question.component"
               v-bind:questionText="question.questionText"
@@ -179,11 +194,11 @@ export default {
 };
 </script>
 
-<style>
+<style >
 .feedback-panel-button {
   transform: rotate(-90deg) translateY(-50%);
   position: fixed;
-  right: -4.1rem; /* Adjust this value to align perfectly */
+  right: -5rem; /* Adjust this value to align perfectly */
   top: 50%;
   padding: 0.25rem 1.5rem;
   border: 1px solid transparent;
@@ -191,7 +206,10 @@ export default {
   cursor: pointer;
   transition: transform 0.5s, background-color 0.2s;
   z-index: 1;
-  background-color: #327F86;
+  background-color: #108291;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* Adjust the gap between the icon and the text as needed */
 }
 
 .feedback-panel-button:hover {
@@ -234,18 +252,17 @@ export default {
   z-index: 2;
 }
 
-/* .reminder-enter-active,
-.reminder-leave-active {
-  opacity: 1 !important;
-}
-
-.reminder-enter,
-.reminder-leave-to {
-  opacity: 0 !important;
-} */
-
 .feedback-panel-question-container {
   margin: 2.5rem;
+}
+
+.feedback-panel-header {
+  display: flex;
+  margin-bottom: 1rem;
+  .provide-feedback {
+    font-size: 1rem;
+  }
+  gap: 0.25rem;
 }
 
 .feedback-panel-content {
@@ -274,7 +291,7 @@ export default {
 }
 
 .feedback-panel-btn-feedback {
-  background-color: #327F86;
+  background-color: #108291;
   border: 2px solid #ffffff00;
   color: white;
   min-width: 56px;
@@ -364,3 +381,4 @@ export default {
   }
 }
 </style>
+

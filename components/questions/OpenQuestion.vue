@@ -32,8 +32,8 @@ export default {
 <style scoped>
 .question {
   word-wrap: break-word;
-  margin-bottom: 20px;
-  font-weight: 600;
+  margin-bottom: 1rem;
+  /* font-weight: 600; */
   font-size: 1rem;
 }
 
