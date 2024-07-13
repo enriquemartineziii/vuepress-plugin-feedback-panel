@@ -190,7 +190,7 @@ export default {
   border-radius: 0.25rem 0.25rem 0 0;
   cursor: pointer;
   transition: transform 0.5s, background-color 0.2s;
-  z-index: 1001;
+  z-index: 1;
   background-color: #327F86;
 }
 
@@ -200,7 +200,7 @@ export default {
 
 .feedback-panel-dialog-container {
   /* Fixes code blocks overlap */
-  z-index: 1003;
+  z-index: 3;
   position: fixed;
   right: 0;
   top: 0;
@@ -231,7 +231,7 @@ export default {
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1002;
+  z-index: 2;
 }
 
 /* .reminder-enter-active,
