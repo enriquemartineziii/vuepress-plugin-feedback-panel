@@ -299,9 +299,18 @@ export default {
   justify-content: flex-end;
 }
 
-.feedback-panel-btn-back {
+.feedback-panel-btn-back .feedback-panel-btn-feedback {
   display: flex;
   justify-content: flex-start;
+  background-color: #E0E0E0;
+  color: black;
+}
+
+.feedback-panel-btn-back .feedback-panel-btn-feedback:hover {
+  display: flex;
+  justify-content: flex-start;
+  background-color: lightgray;
+  color: black;
 }
 
 .feedback-panel-last-view {
