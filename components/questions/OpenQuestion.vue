@@ -2,7 +2,7 @@
   <div class="container">
     <div class="question">{{ questionText }}</div>
     <div class="text">
-      <textarea rows=5 v-model="comment" placeholder="..."></textarea>
+      <textarea rows=5 v-model="comment" placeholder="What did you like or dislike? How can we improve this page?"></textarea>
     </div>
     <div class="buttons">
       <slot></slot>
@@ -33,7 +33,8 @@ export default {
 .question {
   word-wrap: break-word;
   margin-bottom: 20px;
-  font-weight: 400;
+  font-weight: 600;
+  font-size: 1rem;
 }
 
 .stars {
@@ -53,8 +54,10 @@ button {
 }
 
 textarea {
-  resize:vertical;
+  resize: vertical;
   width: 100%;
+  
+
 }
 
 // .btn-feedback {

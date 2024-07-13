@@ -50,7 +50,8 @@ export default {
 <style lang="stylus" scoped>
 .question {
   margin-bottom: 20px;
-  font-weight: 400;
+  font-weight: 600;
+  font-size: 1rem;
 }
 
 .answers {
@@ -70,10 +71,13 @@ export default {
 }
 
 .answer {
-  color: #888888;
+  color: black;
   font-size: 1.1em;
   font-weight: 200;
   cursor: pointer;
+//  border: 1px solid lightgray;
+//  padding: 0.25rem 2rem;
+//  border-radius: 0.25rem;
 }
 
 .answer:hover {

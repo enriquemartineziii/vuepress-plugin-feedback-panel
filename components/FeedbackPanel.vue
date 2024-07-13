@@ -3,12 +3,11 @@
     <div class="feedback-panel-button" v-on:click="revealClicked" ref="feedbackButton">
       <span class="feedback-panel-content">{{options.buttonText}}</span>
     </div>
-    <!-- <transition name="reminder">
-      <Reminder v-if="isReminderOpen" style="transition: all 0.5s;">
-        We would love to hear your feedback and learn about your experience.
-        What could we improve?
-      </Reminder>
-    </transition> -->
+
+    <transition name="feedback-panel">
+      <div v-if="isPanelOpen" class="feedback-panel-overlay" v-on:click="revealClicked"></div>
+    </transition>
+
     <div>
       <transition name="feedback-panel">
         <div v-if="isPanelOpen" class="feedback-panel-dialog-container">
@@ -51,19 +50,20 @@
 
           <div v-else class="feedback-panel-last-view">
             Thanks for your feedback. It helps us to make our website better!
-            <div class="feedback-panel-loading">
+            <!-- <div class="feedback-panel-loading">
               <img
                 class="feedback-panel-loading"
                 v-if="sendingInProgress"
                 :src="require('../assets/loading.gif')"
               />
-            </div>
+            </div> -->
           </div>
         </div>
       </transition>
     </div>
   </div>
 </template>
+
 
 <script>
 import Reminder from "./Reminder.vue";
@@ -233,16 +233,18 @@ export default {
 
 <style>
 .feedback-panel-button {
+  transform: rotate(-90deg) translateY(-50%);
   position: fixed;
-  right: 7rem;
-  bottom: 1.3rem;
-  padding: 0.5rem 1rem;
+  right: -4rem; /* Adjust this value to align perfectly */
+  top: 50%;
+  padding: 0.25rem 1.5rem;
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: 0.25rem 0.25rem 0 0;
   cursor: pointer;
   transition: transform 0.5s, background-color 0.5s;
   z-index: 1001;
-  background-color: #006aff;
+  /* background-color: #296c70; */
+  background-color: #327F86;
 }
 
 .feedback-panel-dialog-container {
@@ -250,28 +252,40 @@ export default {
   z-index: 1003;
 
   position: fixed;
-  right: 3rem;
-  bottom: 4rem;
+  right: 0;
+  top: 0;
   background-color: white;
-  border: 1px solid #dedede;
-  border-radius: 10px;
-  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+  border: 1px solid #f8f8f8;
+  /* border-radius: 10px; */
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   transition: transform 0.5s, box-shadow 0.5s;
   overflow: auto;
   width: 25rem;
-  max-height: 30rem;
+  height: 100vh;
+  /* max-height: 30rem; */
   /* height: 20rem; */
 }
 
 .feedback-panel-enter-active,
 .feedback-panel-leave-active {
-  transform: translateY(0rem);
+  transform: translateX(0rem);
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
 .feedback-panel-enter,
 .feedback-panel-leave-to {
-  transform: translateY(30rem);
-  box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.75);
+  transform: translateX(30rem);
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.feedback-panel-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1002;
 }
 
 /* .reminder-enter-active,
@@ -291,6 +305,7 @@ export default {
 .feedback-panel-content {
   color: white;
   font-weight: 500;
+  font-size: 1.2rem;
 }
 
 .feedback-panel-loading {
