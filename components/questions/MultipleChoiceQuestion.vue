@@ -64,7 +64,7 @@
 }
 
 .choice label {
-  margin-left: 0.25rem;
+  margin-left: 0.4rem;
 }
 
 .choice input {

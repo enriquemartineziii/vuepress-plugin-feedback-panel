@@ -9,6 +9,12 @@ export default ({ Vue, router }) => {
   configure();
   addComponents(Vue);
 
+  router.afterEach((to, from) => {
+    if (window.feedbackPanelState) {
+      window.feedbackPanelState.isPanelOpen = false;
+    }
+  });
+
   // Feedback panel will not open itself automatically for now
   // That may be enabled in the future
   // setupSpecificPagesTrigger(router);

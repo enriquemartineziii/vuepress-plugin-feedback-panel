@@ -1,66 +1,49 @@
 <template>
   <div>
     <div class="feedback-panel-button" v-on:click="revealClicked" ref="feedbackButton">
-      <img
-        src="../assets/documentation-white.svg"
-        height="20px"
-        alt="docs icon"
-        draggable="false"
-      />
-      <span class="feedback-panel-content">{{options.buttonText}}</span>
-    </div>
-
-    <transition name="feedback-panel">
-      <div v-if="isPanelOpen" class="feedback-panel-overlay" v-on:click="revealClicked"></div>
-    </transition>
-
-    <div>
-      <transition name="feedback-panel">
-        <div v-if="isPanelOpen" class="feedback-panel-dialog-container">
-          <div v-on:click="revealClicked" class="feedback-panel-close-btn">
-            <span>+</span>
-          </div>
-          <div class="feedback-panel-question-container" v-if="question !== null">
-            <div class="feedback-panel-header">
-              <img
-                src="../assets/documentation.svg"
-                height="20px"
-                alt="docs icon"
-                draggable="false"
-              />
-              <div class="provide-feedback"><strong>Provide feedback</strong></div>
+      <img src="../assets/documentation-white.svg" height="20px" alt="docs icon" draggable="false"/>
+    <span class="feedback-panel-content">{{options.buttonText}}</span>
+  </div>
+  <transition name="feedback-panel">
+    <div v-if="isPanelOpen" class="feedback-panel-overlay" v-on:click="revealClicked"></div>
+  </transition>
+  <div>
+        <transition name="feedback-panel">
+          <div v-if="isPanelOpen" class="feedback-panel-dialog-container">
+            <div v-on:click="revealClicked" class="feedback-panel-close-btn">
+              <span>+</span>
             </div>
-            <component
-              v-bind:is="question.component"
-              v-bind:questionText="question.questionText"
-              v-bind="question.props"
-              @answered="answerProvided"
-            >
-              <div class="feedback-panel-additional-buttons">
-                <div class="feedback-panel-btn-back">
-                  <button
-                    v-if="!question.isFirst && question.canBack"
-                    @click="previousQuestion"
-                    class="feedback-panel-btn-feedback"
-                  >
-                    Back
-                  </button>
-                </div>
-                <div class="feedback-panel-btn-skip" v-if="question.skippable">
-                  <button @click="skip" class="feedback-panel-btn-feedback">
-                    Skip
-                  </button>
-                </div>
+            <div class="feedback-panel-question-container" v-if="question !== null">
+              <div class="feedback-panel-header">
+                <img src="../assets/documentation.svg" height="20px" alt="docs icon" draggable="false"/>
+                <div class="provide-feedback"><strong>Provide feedback</strong></div>
               </div>
-            </component>
-
+              <component v-bind:is="question.component" v-bind:questionText="question.questionText" v-bind="question.props" @answered="answerProvided">
+                <div class="feedback-panel-additional-buttons">
+                  <div class="feedback-panel-btn-back">
+                    <button v-if="!question.isFirst && question.canBack" @click="previousQuestion" class="feedback-panel-btn-feedback">
+                      Back
+                    </button>
+                  </div>
+                  <div class="feedback-panel-btn-skip" v-if="question.skippable">
+                    <button @click="skip" class="feedback-panel-btn-feedback">
+                      Skip
+                    </button>
+                  </div>
+                </div>
+              </component>
             <Stepper class="feedback-panel-stepper" :total="totalQuestions" :current="question.questionNumber" />
           </div>
-
           <div v-else class="feedback-panel-last-view">
-            Thanks for your feedback. It helps us to make our website better!
+              <div class="feedback-panel-header">
+                <img src="../assets/documentation.svg" height="20px" alt="docs icon" draggable="false"/>
+                <div class="provide-feedback">
+                  <strong>Provide feedback</strong>
+                </div>
+              </div>
+                Thank you for your feedback!
+              </div>
           </div>
-        </div>
       </transition>
     </div>
   </div>
@@ -194,191 +177,166 @@ export default {
 };
 </script>
 
-<style >
-.feedback-panel-button {
-  transform: rotate(-90deg) translateY(-50%);
-  position: fixed;
-  right: -5rem; /* Adjust this value to align perfectly */
-  top: 50%;
-  padding: 0.25rem 1.5rem;
-  border: 1px solid transparent;
-  border-radius: 0.25rem 0.25rem 0 0;
-  cursor: pointer;
-  transition: transform 0.5s, background-color 0.2s;
-  z-index: 1;
-  background-color: #108291;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem; /* Adjust the gap between the icon and the text as needed */
-}
-
-.feedback-panel-button:hover {
-  background-color: #2b6173;
-}
-
-.feedback-panel-dialog-container {
-  /* Fixes code blocks overlap */
-  z-index: 3;
-  position: fixed;
-  right: 0;
-  top: 0;
-  background-color: white;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  transition: transform 0.5s, box-shadow 0.5s;
-  overflow: auto;
-  width: 25rem;
-  height: 100vh;
-}
-
-.feedback-panel-enter-active,
-.feedback-panel-leave-active {
-  transform: translateX(0rem);
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-}
-
-.feedback-panel-enter,
-.feedback-panel-leave-to {
-  transform: translateX(30rem);
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-}
-
-.feedback-panel-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 2;
-}
-
-.feedback-panel-question-container {
-  margin: 2.5rem;
-}
-
-.feedback-panel-header {
-  display: flex;
-  margin-bottom: 1rem;
-  .provide-feedback {
+<style>
+  .feedback-panel-button {
+    transform: rotate(-90deg) translateY(-50%);
+    position: fixed;
+    right: -5rem;
+    top: 50%;
+    padding: 0.25rem 1.5rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem 0.25rem 0 0;
+    cursor: pointer;
+    transition: transform 0.5s, background-color 0.2s;
+    z-index: 1;
+    background-color: #108291;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .feedback-panel-button:hover {
+    background-color: #0d6d7a;
+  }
+  .feedback-panel-dialog-container {
+    z-index: 3;
+    position: fixed;
+    right: 0;
+    top: 0;
+    background-color: white;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    transition: transform 0.5s, box-shadow 0.5s;
+    overflow: auto;
+    width: 21rem;
+    height: 100vh;
+  }
+  .feedback-panel-enter-active,
+  .feedback-panel-leave-active {
+    transform: translateX(0rem);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  }
+  .feedback-panel-enter,
+  .feedback-panel-leave-to {
+    transform: translateX(30rem);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  }
+  .feedback-panel-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+  }
+  .feedback-panel-question-container {
+    margin: 2rem;
+  }
+  .feedback-panel-header {
+    display: flex;
+    margin-bottom: 1rem;
+    gap: 0.25rem;
+  }
+  .feedback-panel-header .provide-feedback {
     font-size: 1rem;
   }
-  gap: 0.25rem;
-}
-
-.feedback-panel-content {
-  color: white;
-  font-weight: 500;
-  font-size: 1.2rem;
-}
-
-.feedback-panel-loading {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-}
-
-.feedback-panel-loading img {
-  width: 50px;
-}
-
-.feedback-panel-stepper {
-  position: absolute;
-  bottom: 1em;
-  right: 0;
-  -webkit-transform: translateX(-50%);
-  transform: translateX(-50%);
-  color: gray;
-}
-
-.feedback-panel-btn-feedback {
-  background-color: #108291;
-  border: 2px solid #ffffff00;
-  color: white;
-  min-width: 56px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-family: inherit;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.feedback-panel-btn-feedback:hover {
-  background-color: #2b6173;
-  transition: 0.2s ease;
-}
-
-.feedback-panel-btn-feedback:active {
-  background-color: #2b6173;
-}
-
-.feedback-panel-btn-skip {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.feedback-panel-btn-back .feedback-panel-btn-feedback {
-  display: flex;
-  justify-content: flex-start;
-  background-color: #E0E0E0;
-  color: black;
-}
-
-.feedback-panel-btn-back .feedback-panel-btn-feedback:hover {
-  display: flex;
-  justify-content: flex-start;
-  background-color: lightgray;
-  color: black;
-}
-
-.feedback-panel-last-view {
-  padding: 2em;
-}
-
-.feedback-panel-close-btn {
-  position: absolute;
-  right: 10px;
-  cursor: pointer;
-  width: 30px;
-  height: 30px;
-  margin: 10px 5px;
-  border-radius: 50%;
-  text-align: center;
-  font-weight: 700;
-  line-height: 28px;
-  font-size: 25px;
-  transform: rotate(45deg);
-}
-
-.feedback-panel-additional-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1em;
-}
-
-.feedback-panel-shaky {
-  animation: shake 1s cubic-bezier(0.36, 0.07, 0.19, 0.97) both infinite;
-  transform: translate3d(0, 0, 0);
-  transform: scale(1);
-}
-
-@keyframes feedback-panel-shake {
-  10%,
-  90% {
-    transform: translate3d(-1px, 0, 0);
+  .feedback-panel-content {
+    color: white;
+    font-weight: 500;
+    font-size: 1.2rem;
   }
-  20%,
-  80% {
-    transform: translate3d(2px, 0, 0);
+  .feedback-panel-loading {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
   }
-  30%,
-  50%,
-  70% {
-    transform: translate3d(-10px, 0, 0);
+  .feedback-panel-loading img {
+    width: 50px;
   }
-  40%,
-  60% {
-    transform: translate3d(4px, 0, 0);
+  .feedback-panel-stepper {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    color: #5f6368;
   }
-}
+  .feedback-panel-btn-feedback {
+    background-color: #108291;
+    border: 2px solid #ffffff00;
+    color: white;
+    min-width: 56px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+  .feedback-panel-btn-feedback:hover {
+    background-color: #0d6d7a;
+    transition: 0.2s ease;
+  }
+  .feedback-panel-btn-feedback:active {
+    background-color: #0d6d7a;
+  }
+  .feedback-panel-btn-skip {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .feedback-panel-btn-back .feedback-panel-btn-feedback {
+    display: flex;
+    justify-content: flex-start;
+    background-color: #f1f3f4;
+    color: black;
+  }
+  .feedback-panel-btn-back .feedback-panel-btn-feedback:hover {
+    display: flex;
+    justify-content: flex-start;
+    background-color: #e3e7e9;
+    color: black;
+  }
+  .feedback-panel-last-view {
+    padding: 2rem;
+  }
+  .feedback-panel-close-btn {
+    position: absolute;
+    right: 1rem;
+    cursor: pointer;
+    margin: 10px 5px;
+    border-radius: 50%;
+    text-align: center;
+    font-weight: 300;
+    line-height: 28px;
+    font-size: 25px;
+    transform: rotate(45deg);
+  }
+  .feedback-panel-additional-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1em;
+  }
+  .feedback-panel-shaky {
+    animation: shake 1s cubic-bezier(0.36, 0.07, 0.19, 0.97) both infinite;
+    transform: translate3d(0, 0, 0);
+    transform: scale(1);
+  }
+  @keyframes feedback-panel-shake {
+    10%,
+    90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+    20%,
+    80% {
+      transform: translate3d(2px, 0, 0);
+    }
+    30%,
+    50%,
+    70% {
+      transform: translate3d(-10px, 0, 0);
+    }
+    40%,
+    60% {
+      transform: translate3d(4px, 0, 0);
+    }
+  }
 </style>
 

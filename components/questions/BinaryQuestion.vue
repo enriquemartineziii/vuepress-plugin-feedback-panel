@@ -68,6 +68,7 @@ export default {
 .answers {
   display: flex;
   justify-content: center;
+  gap: 1rem;
 }
 
 .answer {
@@ -85,21 +86,21 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 10px;
+  margin-right: 0.25rem;
 }
 
 .answer-text {
   font-weight: 500;
 }
 
-.answer:hover {
+/* .answer:hover {
   color: #2c3e50 !important;
 }
 
 .answer-text:hover {
   color: #262626;
   font-weight: 500;
-}
+} */
 
 .slot {
   margin-top: 20px;

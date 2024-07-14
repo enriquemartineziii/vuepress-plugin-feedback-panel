@@ -6,9 +6,8 @@
     </div>
     <div class="buttons">
       <slot></slot>
-      <button @click="submit" class="feedback-panel-btn-feedback">Next</button>
+      <button @click="submit" class="feedback-panel-btn-feedback">Submit</button>
     </div>
-
   </div>
 </template>
 
@@ -60,10 +59,12 @@ textarea {
   padding: 1rem; /* Adds padding inside the textarea */
   box-sizing: border-box; /* Includes padding in the textarea's width */
   max-width: 100%; /* Prevents textarea from expanding beyond the container */
-  border: 1px solid lightgray;
+  border: 1px solid #00000000;
   border-radius: 0.25rem;
   min-height: 5rem;
   max-height: 45rem;
+  background-color: #f1f3f4;
+  color: #5f6368;
 }
 
 .container {
