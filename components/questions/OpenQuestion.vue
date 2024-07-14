@@ -33,7 +33,7 @@ export default {
   word-wrap: break-word;
   margin-bottom: 1rem;
   /* font-weight: 600; */
-  font-size: 1rem;
+  /* font-size: 1rem; */
 }
 
 .stars {

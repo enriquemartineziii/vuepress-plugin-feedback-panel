@@ -61,7 +61,7 @@ export default {
 .question {
   margin-bottom: 1rem;
   /* font-weight: 600; */
-  font-size: 1rem;
+  /* font-size: 1rem; */
   /* text-align: center; */
 }
 
@@ -77,7 +77,7 @@ export default {
   align-items: center;
   margin: 0 20px;
   color: black;
-  font-size: 1.1em;
+  /* font-size: 1.1em; */
   font-weight: 200;
   cursor: pointer;
 }
