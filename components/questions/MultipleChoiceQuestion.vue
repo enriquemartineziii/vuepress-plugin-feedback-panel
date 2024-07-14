@@ -67,7 +67,7 @@
   margin-left: 0.4rem;
 }
 
-.choice input {
+/* .choice input {
   appearance: none;
   background-color: #fff;
   margin: 0;
@@ -95,7 +95,7 @@
 
 .choice input:checked::before {
   transform: scale(1);
-}
+} */
 
   .buttons {
     margin-top: 20px;
