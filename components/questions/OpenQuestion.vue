@@ -72,5 +72,10 @@ textarea {
   width: 100%; /* Ensures container takes up full width of its parent */
   box-sizing: border-box; /* Includes padding in the container's width */
 }
-
+@media (max-width: 720px) {
+  textarea {
+    min-height: 5rem;
+    max-height: 7rem;
+  }
+}
 </style>
