@@ -1,36 +1,27 @@
 <template>
   <div>
     <div class="feedback-panel-button" v-on:click="revealClicked" ref="feedbackButton">
+      <img src="../assets/documentation-white.svg" alt="docs icon" draggable="false"/>
       <span class="feedback-panel-content">{{options.buttonText}}</span>
     </div>
-    <!-- <transition name="reminder">
-      <Reminder v-if="isReminderOpen" style="transition: all 0.5s;">
-        We would love to hear your feedback and learn about your experience.
-        What could we improve?
-      </Reminder>
-    </transition> -->
+    <transition name="feedback-panel">
+      <div v-if="isPanelOpen" class="feedback-panel-overlay" v-on:click="revealClicked"></div>
+    </transition>
     <div>
       <transition name="feedback-panel">
         <div v-if="isPanelOpen" class="feedback-panel-dialog-container">
           <div v-on:click="revealClicked" class="feedback-panel-close-btn">
             <span>+</span>
           </div>
-          <div
-            class="feedback-panel-question-container"
-            v-if="question !== null"
-          >
-            <component
-              v-bind:is="question.component"
-              v-bind:questionText="question.questionText"
-              @answered="answerProvided"
-            >
+          <div class="feedback-panel-question-container" v-if="question !== null">
+            <div class="feedback-panel-header">
+              <img src="../assets/documentation.svg" height="20px" alt="docs icon" draggable="false"/>
+              <div class="provide-feedback"><strong>Provide feedback</strong></div>
+            </div>
+            <component v-bind:is="question.component" v-bind:questionText="question.questionText" v-bind="question.props" @answered="answerProvided">
               <div class="feedback-panel-additional-buttons">
                 <div class="feedback-panel-btn-back">
-                  <button
-                    v-if="!question.isFirst && question.canBack"
-                    @click="previousQuestion"
-                    class="feedback-panel-btn-feedback"
-                  >
+                  <button v-if="!question.isFirst && question.canBack" @click="previousQuestion" class="feedback-panel-btn-feedback">
                     Back
                   </button>
                 </div>
@@ -41,23 +32,16 @@
                 </div>
               </div>
             </component>
-
-            <Stepper
-              class="feedback-panel-stepper"
-              :total="totalQuestions"
-              :current="question.questionNumber"
-            />
+            <Stepper class="feedback-panel-stepper" :total="totalQuestions" :current="question.questionNumber" />
           </div>
-
           <div v-else class="feedback-panel-last-view">
-            Thanks for your feedback. It helps us to make our website better!
-            <div class="feedback-panel-loading">
-              <img
-                class="feedback-panel-loading"
-                v-if="sendingInProgress"
-                :src="require('../assets/loading.gif')"
-              />
+            <div class="feedback-panel-header">
+              <img src="../assets/documentation.svg" height="20px" alt="docs icon" draggable="false"/>
+              <div class="provide-feedback">
+                <strong>Provide feedback</strong>
+              </div>
             </div>
+            Thank you for your feedback!
           </div>
         </div>
       </transition>
@@ -71,17 +55,10 @@ import Stepper from "./Stepper.vue";
 import StarQuestion from "./questions/StarQuestion.vue";
 import OpenQuestion from "./questions/OpenQuestion.vue";
 import BinaryQuestion from "./questions/BinaryQuestion.vue";
-import { sendWithRegistration, sendBasic } from "../scripts/feedbackSender";
-import {
-  isPanelOpen,
-  isReminderOpen,
-  mutations,
-} from "../scripts/feedbackStore";
-import { isWorthSubmitting } from "../scripts/generalUtils";
+import MultipleChoiceQuestion from "./questions/MultipleChoiceQuestion.vue";
+import { sendWithRegistration } from "../scripts/feedbackSender";
+import { isPanelOpen, isReminderOpen, mutations } from "../scripts/feedbackStore";
 import options from "../config";
-// import c from "../config";
-// import { getCache, removeCache, setCache } from "../scripts/cacheUtils";
-// import consts from "../consts";
 
 let getFirstQuestion;
 let getNextQuestion;
@@ -95,11 +72,11 @@ export default {
     Stepper,
     StarQuestion,
     OpenQuestion,
-    BinaryQuestion
+    BinaryQuestion,
+    MultipleChoiceQuestion,
   },
 
   created() {
-    // Workaround for a weird behaviour where data() part is executed before the created() hook - init() has to be invoked before the other functions!
     import("../scripts/questions").then((m) => {
       getFirstQuestion = m.getFirstQuestion;
       getNextQuestion = m.getNextQuestion;
@@ -118,7 +95,7 @@ export default {
       sendingInProgress: false,
       totalQuestions: 0,
       feedbackSubmitted: false,
-      options: options.config
+      options: options.config,
     };
   },
 
@@ -127,19 +104,13 @@ export default {
     isReminderOpen: isReminderOpen,
   },
 
+  watch: {
+    isPanelOpen(newVal) {
+      document.body.classList.toggle('no-scroll', newVal);
+    }
+  },
+
   methods: {
-    // enableShakyButton() {
-    //   setInterval(() => {
-    //     if (this.isOpen || this.feedbackSubmitted) return;
-
-    //     const classList = this.$refs.feedbackButton.classList;
-    //     classList.add("shaky");
-    //     setTimeout(() => {
-    //       classList.remove("shaky");
-    //     }, 1000);
-    //   }, c.config.buttonShakeIntervalInSeconds * 1000);
-    // },
-
     revealClicked: function() {
       mutations.toggleIsPanelOpen();
 
@@ -208,169 +179,154 @@ export default {
         this.answers = [];
       }, timeout);
     },
-    // async tryToSendFailedSubmissions() {
-    //   const failedSubmissionsString = getCache(consts.failedFeedbackCacheName);
-    //   if (failedSubmissionsString === null) {
-    //     return;
-    //   }
-    //   console.log("Trying to resend failed feedback submissions");
-    //   let isOk = true;
-    //   const fails = JSON.parse(failedSubmissionsString);
-    //   await fails.submissions.reverse().forEach(async (feedback, i, array) => {
-    //     const freshCache = JSON.parse(getCache(consts.failedFeedbackCacheName));
-    //     freshCache.submissions.splice(array.length - 1 - i, 1);
-    //     setCache(consts.failedFeedbackCacheName, freshCache);
-    //     isOk = isOk && (await sendBasic(feedback));
-    //   });
-
-    //   if (isOk) {
-    //     removeCache(consts.failedFeedbackCacheName);
-    //   }
-    // },
   },
 };
 </script>
 
+
 <style>
+body.no-scroll {
+  overflow: hidden;
+}
+
 .feedback-panel-button {
   position: fixed;
-  right: 7rem;
-  bottom: 1.3rem;
-  padding: 0.5rem 1rem;
-  border: 1px solid transparent;
-  border-radius: 4px;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  background-color: #108291;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  /* width: 56px; */
+  /* height: 56px; */
+  padding: 0.5rem;
+  box-shadow: rgba(17, 12, 46, 0.15) 0px 0px 0px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  transition: transform 0.5s, background-color 0.5s;
-  z-index: 1001;
-  background-color: #006aff;
+  transition: background-color 0.2s;
+  z-index: 2;
+}
+.feedback-panel-button:hover {
+  background-color: #0d6d7a;
+}
+.feedback-panel-button img {
+  width: 20px;
+  height: 20px;
 }
 
 .feedback-panel-dialog-container {
-  /* Fixes code blocks overlap */
-  z-index: 1003;
-
+  z-index: 3;
   position: fixed;
-  right: 3rem;
-  bottom: 4rem;
+  right: 0;
+  top: 0;
   background-color: white;
-  border: 1px solid #dedede;
-  border-radius: 10px;
-  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
-  transition: transform 0.5s, box-shadow 0.5s;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   overflow: auto;
-  width: 25rem;
-  max-height: 30rem;
-  /* height: 20rem; */
+  width: 21rem;
+  height: 100vh;
 }
-
-.feedback-panel-enter-active,
-.feedback-panel-leave-active {
-  transform: translateY(0rem);
+.feedback-panel-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
 }
-
-.feedback-panel-enter,
-.feedback-panel-leave-to {
-  transform: translateY(30rem);
-  box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.75);
-}
-
-/* .reminder-enter-active,
-.reminder-leave-active {
-  opacity: 1 !important;
-}
-
-.reminder-enter,
-.reminder-leave-to {
-  opacity: 0 !important;
-} */
-
 .feedback-panel-question-container {
-  margin: 2.5rem;
+  margin: 2rem;
 }
-
+.feedback-panel-header {
+  display: flex;
+  margin-bottom: 1rem;
+  gap: 0.25rem;
+}
+.feedback-panel-header .provide-feedback {
+  font-size: 1rem;
+}
 .feedback-panel-content {
   color: white;
   font-weight: 500;
+  font-size: 1rem;
 }
-
 .feedback-panel-loading {
   margin-top: 20px;
   display: flex;
   justify-content: center;
 }
-
 .feedback-panel-loading img {
   width: 50px;
 }
-
 .feedback-panel-stepper {
   position: absolute;
-  bottom: 1em;
-  right: 0;
+  bottom: 2rem;
+  right: 2rem;
   -webkit-transform: translateX(-50%);
   transform: translateX(-50%);
+  color: #5f6368;
 }
-
 .feedback-panel-btn-feedback {
-  background-color: #bbbbbb;
+  background-color: #108291;
   border: 2px solid #ffffff00;
-  color: #1f1f1f;
+  color: white;
   min-width: 56px;
   padding: 5px 10px;
   border-radius: 5px;
   font-family: inherit;
   cursor: pointer;
+  transition: 0.2s ease;
 }
-
 .feedback-panel-btn-feedback:hover {
-  background-color: #cccccc;
+  background-color: #0d6d7a;
+  transition: 0.2s ease;
 }
-
 .feedback-panel-btn-feedback:active {
-  background-color: #cccccc;
+  background-color: #0d6d7a;
 }
-
 .feedback-panel-btn-skip {
   display: flex;
   justify-content: flex-end;
 }
-
-.feedback-panel-btn-back {
+.feedback-panel-btn-back .feedback-panel-btn-feedback {
   display: flex;
   justify-content: flex-start;
+  background-color: #f1f3f4;
+  color: black;
 }
-
+.feedback-panel-btn-back .feedback-panel-btn-feedback:hover {
+  display: flex;
+  justify-content: flex-start;
+  background-color: #e3e7e9;
+  color: black;
+}
 .feedback-panel-last-view {
-  padding: 2em;
+  padding: 2rem;
 }
-
 .feedback-panel-close-btn {
   position: absolute;
-  right: 10px;
+  right: 1rem;
   cursor: pointer;
-  width: 30px;
-  height: 30px;
   margin: 10px 5px;
   border-radius: 50%;
   text-align: center;
-  font-weight: 700;
+  font-weight: 300;
   line-height: 28px;
   font-size: 25px;
   transform: rotate(45deg);
 }
-
 .feedback-panel-additional-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 1em;
 }
-
 .feedback-panel-shaky {
   animation: shake 1s cubic-bezier(0.36, 0.07, 0.19, 0.97) both infinite;
   transform: translate3d(0, 0, 0);
   transform: scale(1);
 }
-
 @keyframes feedback-panel-shake {
   10%,
   90% {
@@ -388,6 +344,25 @@ export default {
   40%,
   60% {
     transform: translate3d(4px, 0, 0);
+  }
+}
+@media (max-width: 720px) {
+  .feedback-panel-dialog-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 21rem;
+    width: 29rem;
+    border-radius: 0.5rem;
+  }
+  .feedback-panel-content {
+    display: none;
+  }
+  .feedback-panel-button {
+    border-radius: 50%;
+    bottom: 1.5rem;
+    right: 1.5rem;
   }
 }
 </style>

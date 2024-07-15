@@ -1,6 +1,6 @@
 export default {
     config: {
-        // how many mintes should pass after feedback submission for the feedback
+        // how many minutes should pass after feedback submission for the feedback
         // panel to show up automatically again
         // noAutoFeedbackMinutes: 2,
 

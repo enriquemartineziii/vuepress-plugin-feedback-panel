@@ -2,13 +2,12 @@
   <div class="container">
     <div class="question">{{ questionText }}</div>
     <div class="text">
-      <textarea rows=5 v-model="comment" placeholder="..."></textarea>
+      <textarea rows=5 v-model="comment" placeholder="What did you like or dislike? How can we improve this page?"></textarea>
     </div>
     <div class="buttons">
       <slot></slot>
-      <button @click="submit" class="feedback-panel-btn-feedback">Next</button>
+      <button @click="submit" class="feedback-panel-btn-feedback">Submit</button>
     </div>
-
   </div>
 </template>
 
@@ -29,11 +28,12 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
+<style scoped>
 .question {
   word-wrap: break-word;
-  margin-bottom: 20px;
-  font-weight: 400;
+  margin-bottom: 1rem;
+  /* font-weight: 600; */
+  /* font-size: 1rem; */
 }
 
 .stars {
@@ -45,7 +45,8 @@ export default {
 .buttons {
   margin-top: 20px;
   display: flex;
-  justify-content: flex-end;  
+  justify-content: flex-end;
+
 }
 
 button {
@@ -53,28 +54,28 @@ button {
 }
 
 textarea {
-  resize:vertical;
-  width: 100%;
+  resize: vertical; /* Allows vertical resizing only */
+  width: 100%; /* Ensures textarea takes up full width of its container */
+  padding: 1rem; /* Adds padding inside the textarea */
+  box-sizing: border-box; /* Includes padding in the textarea's width */
+  max-width: 100%; /* Prevents textarea from expanding beyond the container */
+  border: 1px solid #00000000;
+  border-radius: 0.25rem;
+  min-height: 5rem;
+  max-height: 45rem;
+  background-color: #f1f3f4;
+  color: #5f6368;
 }
 
-// .btn-feedback {
-//   background-color: #dbdbdb;
-//   border: 2px solid #dbdbdb;
-//   color: #1f1f1f;
-//   min-width: 56px;
-//   padding: 10px 20px;
-//   border-radius:5px;
-//   font-family: inherit;
-//   cursor: pointer;
-// }
-
-// .btn-feedback:hover {
-//   background-color: #bababa;
-//   border-color: #bababa;
-// }
-
-// .btn-feedback:active {
-//   background-color: #9f9f9f;
-//   border-color: #9f9f9f;
-// }
+.container {
+  overflow: hidden; /* Hides any overflow content */
+  width: 100%; /* Ensures container takes up full width of its parent */
+  box-sizing: border-box; /* Includes padding in the container's width */
+}
+@media (max-width: 720px) {
+  textarea {
+    min-height: 5rem;
+    max-height: 7rem;
+  }
+}
 </style>
